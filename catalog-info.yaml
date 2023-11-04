@@ -1,0 +1,64 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: "SixApi"
+  description: "SixApi"
+  annotations:
+    github.com/project-slug: kubeosx/six-api
+    backstage.io/techdocs-ref: dir:.
+    backstage.io/kubernetes-id: "SixApi"
+    backstage.io/kubernetes-namespace: "dev"
+    prometheus.io/alert: all
+    vault.io/secrets-path: 'kubeos/dev/six-api'
+  tags:
+    - dotnet
+    - webapi
+  links:
+    - url: https://github.com/kubeosx/six-api
+      icon: web
+      title: Github
+    - url: https://github.com/kubeosx/six-api/issues
+      icon: web
+      title: Github Issues
+spec:
+  type: service
+  lifecycle: experimental
+  owner: "group:default/backend-team"
+  system:  "system:default/shopping-app"
+  providesApis:
+    - "SixApi-api"
+  dependsOn:
+    - component:default/kubeos-github-workflows
+  
+    - component:default/vault
+  
+  consumesApis:
+  
+    - api:default/auth-api
+  
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: SixApi-api
+  description: The SixApi API
+  tags:
+    - api
+    - rest
+  links:
+    - url: https://github.com/kubeosx/six-api
+      icon: web
+      title: Github
+    - url: https://github.com/kubeosx/six-api/issues
+      icon: web
+      title: Github Issues
+    - url: https://github.com/kubeosx/six-api/blob/main/src/openapi.json
+      title: API Spec
+      icon: code
+spec:
+  type: openapi
+  lifecycle: experimental
+  owner: "group:default/backend-team"
+  system:  "system:default/shopping-app"
+  definition:
+    $text: ./openapi.json

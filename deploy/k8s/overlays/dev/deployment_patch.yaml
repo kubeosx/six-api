@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: six-api
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app: six-api
+  template:
+    metadata:
+      annotations:
+        backstage.io/kubernetes-id: six-api
+    spec:
+      containers:
+        - name: my-six-api
+          image: rohitrustagi007/six-api:1
+          env: 
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Development"  
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 200m
+              memory: 500Mi
+          securityContext:
+            runAsUser: 1000 # Replace with your desired user ID
+            runAsGroup: 1000 # Replace with your desired group ID
+            capabilities:
+              drop:
+                - all
+            readOnlyRootFilesystem: true

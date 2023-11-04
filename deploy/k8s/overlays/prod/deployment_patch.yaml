@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: SixApi
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app: SixApi
+  template:
+    metadata:
+      annotations:
+        backstage.io/kubernetes-id: "SixApi"
+    spec:
+      containers:
+        - name: my-SixApi
+          image: rohitrustagi007/SixApi:1
+          env: 
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Production"  
+          ports:
+            - containerPort: 8080
+          startupProbe:
+            httpGet:
+              path: /
+              port: 8080
+            failureThreshold: 30
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 200m
+              memory: 500Mi
+          securityContext:
+            runAsUser: 1000 # Replace with your desired user ID
+            runAsGroup: 1000 # Replace with your desired group ID
+            capabilities:
+              drop:
+                - all
+            readOnlyRootFilesystem: true

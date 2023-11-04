@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name:  six-api-ingress
+  annotations:
+    nginx.org/mergeable-ingress-type: "master"
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    
+spec:
+  rules:
+  - host: evolution.k8
+    http:
+      paths:
+      - path: /six-api
+        pathType: Prefix
+        backend:
+          service:
+            name:  six-api
+            port:
+              number: 8080
